@@ -1,8 +1,8 @@
 import Nav from "./Nav";
 import { BsArrowLeft } from "react-icons/bs";
 import { useNavigate, useParams } from "react-router-dom";
-import { AllCountriesProps } from "../Context";
-import { useEffect, useState } from "react";
+import { AllCountriesProps, Context } from "../Context";
+import { useContext, useEffect, useState } from "react";
 
 interface IndividualCountryProps extends AllCountriesProps {
   subregion: string;
@@ -18,10 +18,12 @@ function Country() {
   const { name } = useParams();
   const navigate = useNavigate();
 
+  const { filteredCountries } = useContext(Context)!;
+
   const [individualCountryData, setIndividualCountryData] =
     useState<IndividualCountryProps[]>();
 
-  useEffect(() => {
+  const fetchIndidividualCountry = (name: string) => {
     fetch(`https://restcountries.com/v3.1/name/${name}?fullText=true
 `)
       .then((response) => response.json())
@@ -30,9 +32,22 @@ function Country() {
         console.log(data);
       })
       .catch((err) => console.log(err));
+  };
+
+  useEffect(() => {
+    fetchIndidividualCountry(name!);
   }, []);
 
-  console.log("test", individualCountryData);
+  const getFullCountryName = (countryCode: string) => {
+    return filteredCountries
+      .filter((item) => item.cca3 === countryCode)
+      .map((name) => name.name.common)[0];
+  };
+
+  const handleClickOnBorderCountry = (countryCode: string) => {
+    const countryName = getFullCountryName(countryCode);
+    fetchIndidividualCountry(countryName);
+  };
 
   return (
     <div className="dark:bg-slate-700 dark:text-white">
@@ -94,16 +109,21 @@ function Country() {
                     {country.languages.toLocaleString()}
                   </span>
                 </p>
-                <p className="font-bold">
+                <div className="font-bold">
                   Border Countries:
-                  <div className="font-light">
+                  <div className="font-light gap-2 flex flex-wrap">
                     {country.borders.map((borderingCountry) => (
-                      ///need cca3 from API
-
-                      <span>{borderingCountry}</span>
+                      <span
+                        className="border-2"
+                        onClick={() =>
+                          handleClickOnBorderCountry(borderingCountry)
+                        }
+                      >
+                        {getFullCountryName(borderingCountry)}
+                      </span>
                     ))}
                   </div>
-                </p>
+                </div>
               </div>
             </div>
           ))}

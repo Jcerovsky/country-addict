@@ -1,12 +1,13 @@
-import { AllCountriesProps } from "../Context";
 import { useNavigate } from "react-router-dom";
+import { useContext } from "react";
+import { Context } from "../Context";
 interface Props {
-  filtered: AllCountriesProps[] | undefined;
   isLoading: boolean;
 }
 
-function AllCountries({ filtered, isLoading }: Props) {
+function AllCountries({ isLoading }: Props) {
   const navigate = useNavigate();
+  const context = useContext(Context)!;
 
   const handleSelectCountry = (country: string) => {
     navigate(`/name/${country}`);
@@ -15,7 +16,7 @@ function AllCountries({ filtered, isLoading }: Props) {
   return (
     <div className="mt-5">
       {isLoading && <h1 className="text-center">Loading...</h1>}
-      {filtered?.map((country) => (
+      {context.filteredCountries.map((country) => (
         <div
           className="flex flex-col gap-5 mb-16 shadow-lg rounded-md pb-5 overflow-hidden cursor-pointer dark:bg-slate-700 dark:border-3 "
           key={country.name.common}

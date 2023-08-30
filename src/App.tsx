@@ -1,17 +1,14 @@
 import { PiMagnifyingGlass } from "react-icons/pi";
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import AllCountries from "./components/AllCountries";
-import { AllCountriesProps } from "./Context";
+import { AllCountriesProps, Context } from "./Context";
 import Nav from "./components/Nav";
 
 function App() {
-  const [allCountries, setAllCountries] = useState<
-    AllCountriesProps[] | undefined
-  >([]);
-  const [filteredCountries, setFilteredCountries] = useState<
-    AllCountriesProps[] | undefined
-  >([]);
+  const [allCountries, setAllCountries] = useState<AllCountriesProps[]>([]);
+
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const context = useContext(Context)!;
 
   useEffect(() => {
     fetch("https://restcountries.com/v3.1/all")
@@ -19,7 +16,7 @@ function App() {
       .then((data) => {
         console.log(data);
         setAllCountries(data);
-        setFilteredCountries(data);
+        context?.setFilteredCountries(data);
         setIsLoading(false);
       })
       .catch((err) => console.log(err));
@@ -29,10 +26,10 @@ function App() {
 
   const handleInputSearch = (value: string) => {
     if (value === "Filter by Region") {
-      setFilteredCountries(allCountries);
+      context.setFilteredCountries(allCountries);
     }
 
-    setFilteredCountries(
+    context.setFilteredCountries(
       allCountries?.filter((country) =>
         country.name.common.toLowerCase().includes(value.toLowerCase()),
       ),
@@ -43,7 +40,7 @@ function App() {
     if (inputRef.current?.value) {
       inputRef.current.value = "";
     }
-    setFilteredCountries(
+    context.setFilteredCountries(
       allCountries?.filter(
         (country) => country.region.toLowerCase() === value.toLowerCase(),
       ),
@@ -79,7 +76,7 @@ function App() {
             <option value="Oceania">Oceania</option>
           </select>
         </section>
-        <AllCountries filtered={filteredCountries} isLoading={isLoading} />
+        <AllCountries isLoading={isLoading} />
       </main>
     </div>
   );
