@@ -1,15 +1,15 @@
-import { AllCountriesProps } from "./src/Context";
-
+import { AllCountriesProps } from "../Context";
+import { useNavigate } from "react-router-dom";
 interface Props {
   filtered: AllCountriesProps[] | undefined;
   isLoading: boolean;
 }
 
 function AllCountries({ filtered, isLoading }: Props) {
+  const navigate = useNavigate();
+
   const handleSelectCountry = (country: string) => {
-    fetch(`https://restcountries.com/v3.1/name/${country}`)
-      .then((response) => response.json())
-      .then((data) => console.log(data));
+    navigate(`/name/${country}`);
   };
 
   return (

@@ -1,22 +1,25 @@
 import { PiMagnifyingGlass } from "react-icons/pi";
 import { useEffect, useRef, useState } from "react";
-import AllCountries from "../AllCountries";
+import AllCountries from "./components/AllCountries";
 import { AllCountriesProps } from "./Context";
-import Nav from "../Nav";
+import Nav from "./components/Nav";
 
 function App() {
   const [allCountries, setAllCountries] = useState<
     AllCountriesProps[] | undefined
   >([]);
-  const [filtered, setFiltered] = useState<AllCountriesProps[] | undefined>([]);
+  const [filteredCountries, setFilteredCountries] = useState<
+    AllCountriesProps[] | undefined
+  >([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
     fetch("https://restcountries.com/v3.1/all")
       .then((response) => response.json())
       .then((data) => {
+        console.log(data);
         setAllCountries(data);
-        setFiltered(data);
+        setFilteredCountries(data);
         setIsLoading(false);
       })
       .catch((err) => console.log(err));
@@ -24,25 +27,25 @@ function App() {
 
   const inputRef = useRef<HTMLInputElement | null>(null);
 
-  const handleSearch = (e: string) => {
-    if (e === "Filter by Region") {
-      setFiltered(allCountries);
+  const handleInputSearch = (value: string) => {
+    if (value === "Filter by Region") {
+      setFilteredCountries(allCountries);
     }
 
-    setFiltered(
+    setFilteredCountries(
       allCountries?.filter((country) =>
-        country.name.common.toLowerCase().includes(e.toLowerCase()),
+        country.name.common.toLowerCase().includes(value.toLowerCase()),
       ),
     );
   };
 
-  const handleSelect = (e: string) => {
+  const handleSelect = (value: string) => {
     if (inputRef.current?.value) {
       inputRef.current.value = "";
     }
-    setFiltered(
+    setFilteredCountries(
       allCountries?.filter(
-        (country) => country.region.toLowerCase() === e.toLowerCase(),
+        (country) => country.region.toLowerCase() === value.toLowerCase(),
       ),
     );
   };
@@ -59,7 +62,7 @@ function App() {
               placeholder="Search for a country..."
               className="p-2 outline-none dark:bg-slate-700"
               ref={inputRef}
-              onChange={(e) => handleSearch(e.target.value)}
+              onChange={(e) => handleInputSearch(e.target.value)}
             />
           </div>
         </section>
@@ -76,7 +79,7 @@ function App() {
             <option value="Oceania">Oceania</option>
           </select>
         </section>
-        <AllCountries filtered={filtered} isLoading={isLoading} />
+        <AllCountries filtered={filteredCountries} isLoading={isLoading} />
       </main>
     </div>
   );

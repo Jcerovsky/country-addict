@@ -1,14 +1,12 @@
 import { PiStarAndCrescent } from "react-icons/pi";
 import { useContext } from "react";
-import { Context } from "./src/Context";
+import { Context } from "../Context";
 
 function Nav() {
   const context = useContext(Context);
 
   const handleThemeChange = () => {
-    console.log("clicked");
     context!.setTheme((prevState) => {
-      console.log(prevState);
       return prevState === "light" ? "dark" : "light";
     });
   };

@@ -7,6 +7,9 @@ export interface AllCountriesProps {
   };
   name: {
     common: string;
+    nativeName: {
+      common: string;
+    };
   };
   population: number;
   region: string;
