@@ -1,5 +1,6 @@
 import { PiStarAndCrescent, PiMagnifyingGlass } from "react-icons/pi";
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
+import { Context } from "./Context";
 
 interface AllCountriesProps {
   capital: string | string[];
@@ -32,6 +33,7 @@ function App() {
   }, []);
 
   const inputRef = useRef<HTMLInputElement | null>(null);
+  const context = useContext(Context);
 
   const handleSearch = (e: string) => {
     if (e === "Filter by Region" || e.length < 2) return;
@@ -52,12 +54,26 @@ function App() {
     console.log(e);
   };
 
+  useEffect(() => {
+    if (context?.theme === "light") {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
+  }, [context?.theme]);
+
+  const handleThemeChange = () => {
+    context?.setTheme((prevState) =>
+      prevState === "light" ? "dark" : "light",
+    );
+  };
+
   return (
-    <div className="bg-zinc-100">
+    <div className="bg-zinc-100 dark:bg-slate-900 text-white">
       <header>
         <nav className="flex gap-2 p-5 shadow-lg">
           <h1 className="font-bold">Where in the world?</h1>
-          <span className="self-center ml-auto">
+          <span className="self-center ml-auto" onClick={handleThemeChange}>
             <PiStarAndCrescent />
           </span>
           <p>Dark Mode</p>
