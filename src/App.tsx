@@ -1,6 +1,5 @@
 import { PiStarAndCrescent, PiMagnifyingGlass } from "react-icons/pi";
-import { useContext, useEffect, useRef, useState } from "react";
-import { Context } from "./Context";
+import { useEffect, useRef, useState } from "react";
 
 interface AllCountriesProps {
   capital: string | string[];
@@ -20,6 +19,7 @@ function App() {
   >([]);
   const [filtered, setFiltered] = useState<AllCountriesProps[] | undefined>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [theme, setTheme] = useState<string>("light");
 
   useEffect(() => {
     fetch("https://restcountries.com/v3.1/all")
@@ -33,7 +33,6 @@ function App() {
   }, []);
 
   const inputRef = useRef<HTMLInputElement | null>(null);
-  const context = useContext(Context);
 
   const handleSearch = (e: string) => {
     if (e === "Filter by Region" || e.length < 2) return;
@@ -55,21 +54,19 @@ function App() {
   };
 
   useEffect(() => {
-    if (context?.theme === "light") {
+    if (theme === "light") {
       document.documentElement.classList.add("dark");
     } else {
       document.documentElement.classList.remove("dark");
     }
-  }, [context?.theme]);
+  }, [theme]);
 
   const handleThemeChange = () => {
-    context?.setTheme((prevState) =>
-      prevState === "light" ? "dark" : "light",
-    );
+    setTheme((prevState) => (prevState === "light" ? "dark" : "light"));
   };
 
   return (
-    <div className="bg-zinc-100 dark:bg-slate-900 text-white">
+    <div className="bg-zinc-100 dark:bg-slate-800 dark:text-white">
       <header>
         <nav className="flex gap-2 p-5 shadow-lg">
           <h1 className="font-bold">Where in the world?</h1>
@@ -81,12 +78,12 @@ function App() {
       </header>
       <main className="m-4">
         <section>
-          <div className="flex items-center justify-center gap-5 p-2 opacity-50 shadow-md rounded-md bg-white">
+          <div className="flex items-center justify-center gap-5 p-2 opacity-50 dark:opacity-100 shadow-md rounded-md bg-white dark:bg-slate-700">
             <PiMagnifyingGlass />
             <input
               type="text"
               placeholder="Search for a country..."
-              className="p-2 outline-none"
+              className="p-2 outline-none dark:bg-slate-700"
               ref={inputRef}
               onChange={(e) => handleSearch(e.target.value)}
             />
@@ -94,7 +91,7 @@ function App() {
         </section>
         <section className="mt-10">
           <select
-            className="p-4 shadow-md rounded-md"
+            className="p-4 shadow-md rounded-md dark:bg-slate-700"
             onChange={(e) => handleSelect(e.target.value)}
           >
             <option value="Filter by Region">Filter by Region</option>
@@ -110,7 +107,7 @@ function App() {
             {isLoading && <h1 className="text-center">Loading...</h1>}
             {filtered?.map((country) => (
               <div
-                className="flex flex-col gap-5 mb-16 shadow-lg rounded-md pb-5 overflow-hidden cursor-pointer"
+                className="flex flex-col gap-5 mb-16 shadow-lg rounded-md pb-5 overflow-hidden cursor-pointer dark:bg-slate-700 dark:border-3 "
                 key={country.name.common}
               >
                 <img src={country.flags.png}></img>
