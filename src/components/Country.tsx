@@ -18,24 +18,20 @@ function Country() {
   const { name } = useParams();
   const navigate = useNavigate();
 
-  const { allCountries } = useContext(Context)!;
+  const { allCountries, setErrMsg } = useContext(Context)!;
 
   const [individualCountryData, setIndividualCountryData] =
     useState<IndividualCountryProps[]>();
 
-  const fetchIndidividualCountry = (name: string) => {
+  useEffect(() => {
     fetch(`https://restcountries.com/v3.1/name/${name}?fullText=true
 `)
       .then((response) => response.json())
       .then((data) => {
         setIndividualCountryData(data);
       })
-      .catch((err) => console.log(err));
-  };
-
-  useEffect(() => {
-    fetchIndidividualCountry(name!);
-  }, [navigate]);
+      .catch((err) => setErrMsg(err));
+  }, [navigate, name, setErrMsg]);
 
   const getFullCountryName = (countryCode: string) => {
     return allCountries
@@ -43,7 +39,7 @@ function Country() {
       .map((name) => name.name.common)[0];
   };
 
-  const countryDetailsStyle = `dark:bg-slate-700 bg-zinc-300 rounded-md pl-1 pr-1 font-light`;
+  const countryDetailsStyle = `dark:bg-slate-700 bg-zinc-300 rounded-md pl-1 pr-1 font-light `;
 
   return (
     <div className="dark:bg-slate-700 dark:text-white bg-zinc-100">
@@ -59,10 +55,14 @@ function Country() {
           {individualCountryData &&
             individualCountryData.map((country) => (
               <div
-                className="flex flex-col gap-5 mb-16 pb-5 cursor-pointer dark:border-3 "
+                className="flex flex-col gap-5 mb-16 pb-5 cursor-pointer dark:border-3 tablet:flex-row tablet:gap-10"
                 key={country.name.common}
               >
-                <img src={country.flags.png}></img>
+                <img
+                  src={country.flags.png}
+                  alt={`Photo of ${country.name}`}
+                  className="tablet:w-full"
+                ></img>
                 <div className="mt-5 flex flex-col gap-2">
                   <h1 className="font-bold mb-5">{country.name.common}</h1>
                   <p className="font-bold">
@@ -103,23 +103,29 @@ function Country() {
                       </p>
                     </div>
                   </div>
-                  <p className="font-bold mt-5">
-                    Domain:
-                    <span className={countryDetailsStyle}> {country.tld}</span>
-                  </p>
-                  <p className="font-bold flex gap-1">
-                    Currencies:
-                    <span className="font-light flex gap-1">
-                      {Object.keys(country.currencies).map((currencyCode) => (
-                        <span
-                          className={countryDetailsStyle}
-                          key={crypto.randomUUID()}
-                        >
-                          {country.currencies[currencyCode].name}
-                        </span>
-                      ))}
-                    </span>
-                  </p>
+                  <div>
+                    <p className="font-bold mt-5">
+                      Domain:
+                      <span className={countryDetailsStyle}>
+                        {" "}
+                        {country.tld}
+                      </span>
+                    </p>
+                    <p className="font-bold flex gap-1">
+                      Currencies:
+                      <span className="font-light flex gap-1">
+                        {Object.keys(country.currencies).map((currencyCode) => (
+                          <span
+                            className={countryDetailsStyle}
+                            key={crypto.randomUUID()}
+                          >
+                            {country.currencies[currencyCode].name}
+                          </span>
+                        ))}
+                      </span>
+                    </p>
+                  </div>
+
                   <div className="font-bold flex gap-1">
                     Languages:
                     <div className="font-light flex flex-wrap gap-2">

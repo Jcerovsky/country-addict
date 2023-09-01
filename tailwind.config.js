@@ -5,10 +5,10 @@ export default {
   theme: {
     extend: {},
     screens: {
-      smTablet: "400px",
-      tablet: "640px",
+      smTablet: "435px",
+      tablet: "750px",
 
-      desktop: "1280px",
+      desktop: "960px",
     },
   },
   plugins: [],

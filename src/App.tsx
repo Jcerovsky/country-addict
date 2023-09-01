@@ -26,7 +26,7 @@ function App() {
         setIsLoading(false);
       })
       .catch((err) => setErrMsg(err));
-  }, []);
+  }, [setAllCountries, setFilteredCountries, setErrMsg]);
 
   const inputRef = useRef<HTMLInputElement | null>(null);
 
@@ -45,6 +45,21 @@ function App() {
           country.name.common.toLowerCase().includes(value.toLowerCase()),
         ),
       );
+    }
+  };
+
+  const sortCountriesBy = (filter: string) => {
+    console.log(filter);
+    if (filter === "PopulationUp") {
+      const sortedCountries = [...allCountries].sort(
+        (a, b) => b.population - a.population,
+      );
+      setFilteredCountries(sortedCountries);
+    } else if (filter === "PopulationDown") {
+      const sortedCountries = [...allCountries].sort(
+        (a, b) => a.population - b.population,
+      );
+      setFilteredCountries(sortedCountries);
     }
   };
 
@@ -72,8 +87,8 @@ function App() {
       <div className="bg-zinc-100 dark:bg-slate-800 dark:text-white ">
         <Nav />
         {errMsg && <ErrorMessage />}
-        <main className="m-4">
-          <div className="smTablet:flex justify-between smTablet:items-center">
+        <main className="m-4 smTablet:mt-0">
+          <div className="smTablet:flex justify-between smTablet:items-center smTablet:mt-5 smTablet:gap-1">
             <div className="flex items-center  justify-center gap-5 p-2 opacity-50 dark:opacity-100 shadow-md rounded-md bg-white dark:bg-slate-700">
               <PiMagnifyingGlass />
               <input
@@ -85,7 +100,7 @@ function App() {
               />
             </div>
             <select
-              className="p-4 shadow-md rounded-md dark:bg-slate-700 smTablet:self-center mt-10"
+              className="p-4 shadow-md rounded-md dark:bg-slate-700 smTablet:self-center mt-10 smTablet:mt-0"
               onChange={(e) => handleSelectRegion(e.target.value)}
             >
               <option value="Filter by Region">Filter by Region</option>
@@ -94,6 +109,15 @@ function App() {
               <option value="Asia">Asia</option>
               <option value="Europe">Europe</option>
               <option value="Oceania">Oceania</option>
+            </select>
+
+            <select
+              className="p-4 shadow-md rounded-md dark:bg-slate-700 smTablet:self-center mt-10 smTablet:mt-0"
+              onChange={(e) => sortCountriesBy(e.target.value)}
+            >
+              <option value="Sort by">Sort by</option>
+              <option value="PopulationUp">Population ↑</option>
+              <option value="PopulationDown">Population ↓</option>
             </select>
           </div>
           {filteredCountries.length === 0 ? (

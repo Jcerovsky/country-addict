@@ -14,7 +14,7 @@ function AllCountries({ isLoading }: Props) {
   };
 
   return (
-    <div className="mt-5 sm:grid sm:auto-cols-min sm:gap-5">
+    <div className="mt-5 smTablet:grid smTablet:grid-cols-2 smTablet:gap-2 auto-cols-auto tablet:grid-cols-3 desktop:grid-cols-4 ">
       {isLoading && <h1 className="text-center">Loading...</h1>}
       {context.filteredCountries.map((country) => (
         <div
@@ -22,7 +22,11 @@ function AllCountries({ isLoading }: Props) {
           key={country.name.common}
           onClick={() => handleSelectCountry(country.name.common)}
         >
-          <img src={country.flags.png} className="sm:h-48"></img>
+          <img
+            src={country.flags.png}
+            className="smTablet:h-48"
+            alt={`Flag of ${country.name}`}
+          ></img>
           <div className="p-5 flex flex-col">
             <h1 className="font-bold mb-5">{country.name.common}</h1>
             <p className="font-bold">
