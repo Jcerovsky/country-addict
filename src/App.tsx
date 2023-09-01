@@ -88,8 +88,8 @@ function App() {
         <Nav />
         {errMsg && <ErrorMessage />}
         <main className="m-4 smTablet:mt-0">
-          <div className="smTablet:flex justify-between smTablet:items-center smTablet:mt-5 smTablet:gap-1">
-            <div className="flex items-center  justify-center gap-5 p-2 opacity-50 dark:opacity-100 shadow-md rounded-md bg-white dark:bg-slate-700">
+          <div className="smTablet:flex flex-wrap justify-between smTablet:items-center smTablet:mt-5 smTablet:gap-4">
+            <div className="flex items-center justify-center gap-3 p-2 opacity-50 dark:opacity-100 shadow-md rounded-md bg-white dark:bg-slate-700">
               <PiMagnifyingGlass />
               <input
                 type="text"
@@ -100,7 +100,7 @@ function App() {
               />
             </div>
             <select
-              className="p-4 shadow-md rounded-md dark:bg-slate-700 smTablet:self-center mt-10 smTablet:mt-0"
+              className="p-4 shadow-md rounded-md dark:bg-slate-700 mt-4 smTablet:mt-0 tablet:ml-auto mr-2"
               onChange={(e) => handleSelectRegion(e.target.value)}
             >
               <option value="Filter by Region">Filter by Region</option>
@@ -112,7 +112,7 @@ function App() {
             </select>
 
             <select
-              className="p-4 shadow-md rounded-md dark:bg-slate-700 smTablet:self-center mt-10 smTablet:mt-0"
+              className="p-4 shadow-md rounded-md dark:bg-slate-700 mt-4 smTablet:mt-0"
               onChange={(e) => sortCountriesBy(e.target.value)}
             >
               <option value="Sort by">Sort by</option>

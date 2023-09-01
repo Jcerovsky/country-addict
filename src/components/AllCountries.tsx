@@ -40,15 +40,17 @@ function AllCountries({ isLoading }: Props) {
               Region:
               <span className="font-light"> {country.region}</span>
             </p>
-            <div className="font-bold flex flex-wrap gap-1">
+            <div className="font-bold flex gap-1">
               Capital:
-              <div className="font-light flex gap-2">
+              <div className="font-light flex flex-wrap">
                 {Array.isArray(country.capital) ? (
                   country.capital.map((item) => (
-                    <p key={crypto.randomUUID()}>{item}</p>
+                    <span key={crypto.randomUUID()} className="flex mr-2">
+                      {item}
+                    </span>
                   ))
                 ) : (
-                  <p>{country.capital}</p>
+                  <p className="mr-2">{country.capital}</p>
                 )}
               </div>
             </div>
