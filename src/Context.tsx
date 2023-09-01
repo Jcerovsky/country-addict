@@ -1,14 +1,14 @@
 import React, { createContext, ReactNode, useEffect, useState } from "react";
 
 export interface AllCountriesProps {
-  capital: string | string[];
+  capital: string[];
   flags: {
     png: string;
   };
   name: {
     common: string;
     nativeName: {
-      common: string;
+      [key: string]: { official: string };
     };
   };
   population: number;
@@ -24,6 +24,8 @@ interface ContextProps {
   setFilteredCountries: React.Dispatch<
     React.SetStateAction<AllCountriesProps[]>
   >;
+  allCountries: AllCountriesProps[];
+  setAllCountries: React.Dispatch<React.SetStateAction<AllCountriesProps[]>>;
 }
 
 export const Context = createContext<ContextProps | null>(null);
@@ -34,6 +36,7 @@ export function ContextProvider({ children }: { children: ReactNode }) {
   const [filteredCountries, setFilteredCountries] = useState<
     AllCountriesProps[]
   >([]);
+  const [allCountries, setAllCountries] = useState<AllCountriesProps[]>([]);
 
   useEffect(() => {
     if (theme === "light") {
@@ -51,6 +54,8 @@ export function ContextProvider({ children }: { children: ReactNode }) {
         setTheme,
         filteredCountries,
         setFilteredCountries,
+        allCountries,
+        setAllCountries,
       }}
     >
       {children}

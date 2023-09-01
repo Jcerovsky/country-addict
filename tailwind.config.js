@@ -4,6 +4,12 @@ export default {
   darkMode: "class",
   theme: {
     extend: {},
+    screens: {
+      smTablet: "400px",
+      tablet: "640px",
+
+      desktop: "1280px",
+    },
   },
   plugins: [],
 };

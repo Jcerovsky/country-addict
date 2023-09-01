@@ -8,7 +8,7 @@ interface IndividualCountryProps extends AllCountriesProps {
   subregion: string;
   tld: [];
   currencies: {
-    name: string;
+    [key: string]: { name: string };
   };
   languages: { [key: string]: string };
   borders: string[];
@@ -18,7 +18,7 @@ function Country() {
   const { name } = useParams();
   const navigate = useNavigate();
 
-  const { filteredCountries } = useContext(Context)!;
+  const { allCountries } = useContext(Context)!;
 
   const [individualCountryData, setIndividualCountryData] =
     useState<IndividualCountryProps[]>();
@@ -29,30 +29,26 @@ function Country() {
       .then((response) => response.json())
       .then((data) => {
         setIndividualCountryData(data);
-        console.log(data);
       })
       .catch((err) => console.log(err));
   };
 
   useEffect(() => {
     fetchIndidividualCountry(name!);
-  }, []);
+  }, [navigate]);
 
   const getFullCountryName = (countryCode: string) => {
-    return filteredCountries
+    return allCountries
       .filter((item) => item.cca3 === countryCode)
       .map((name) => name.name.common)[0];
   };
 
-  const handleClickOnBorderCountry = (countryCode: string) => {
-    const countryName = getFullCountryName(countryCode);
-    fetchIndidividualCountry(countryName);
-  };
+  const countryDetailsStyle = `dark:bg-slate-700 bg-zinc-300 rounded-md pl-1 pr-1 font-light`;
 
   return (
-    <div className="dark:bg-slate-700 dark:text-white">
+    <div className="dark:bg-slate-700 dark:text-white bg-zinc-100">
       <Nav />
-      <div className="dark:bg-slate-800  h-screen p-1">
+      <div className="dark:bg-slate-800 p-1">
         <button
           className="flex items-center mt-5 p-1 border-2 pl-5 pr-5 dark:bg-slate-600 shadow:lg m-5 dark:border-none rounded-sm"
           onClick={() => navigate(-1)}
@@ -60,73 +56,110 @@ function Country() {
           <BsArrowLeft /> Back
         </button>
         <div className="p-5">
-          {individualCountryData?.map((country) => (
-            <div
-              className="flex flex-col gap-5 mb-16 shadow-lg pb-5 cursor-pointer  dark:border-3 "
-              key={country.name.common}
-            >
-              <img src={country.flags.png}></img>
-              <div className="mt-5 flex flex-col gap-2">
-                <h1 className="font-bold mb-5">{country.name.common}</h1>
-                <p className="font-bold">
-                  Native name:
-                  <span className="font-light">
-                    {" "}
-                    {country.name.nativeName.common}
-                  </span>
-                </p>
-                <p className="font-bold">
-                  Population:
-                  <span className="font-light">
-                    {" "}
-                    {country.population.toLocaleString("en-US")}
-                  </span>
-                </p>
-                <p className="font-bold">
-                  Region:
-                  <span className="font-light"> {country.region}</span>
-                </p>
-                <p className="font-bold">
-                  Sub Region:
-                  <span className="font-light"> {country.subregion}</span>
-                </p>
-                <p className="font-bold">
-                  Capital:
-                  <span className="font-light"> {country.capital}</span>
-                </p>
-                <p className="font-bold">
-                  Domain:
-                  <span className="font-light"> {country.tld}</span>
-                </p>
-                <p className="font-bold">
-                  Currencies:
-                  <span className="font-light"> {country.currencies.name}</span>
-                </p>
-                <p className="font-bold">
-                  Languages:
-                  <span className="font-light">
-                    {" "}
-                    {country.languages.toLocaleString()}
-                  </span>
-                </p>
-                <div className="font-bold">
-                  Border Countries:
-                  <div className="font-light gap-2 flex flex-wrap">
-                    {country.borders.map((borderingCountry) => (
-                      <span
-                        className="border-2"
-                        onClick={() =>
-                          handleClickOnBorderCountry(borderingCountry)
-                        }
-                      >
-                        {getFullCountryName(borderingCountry)}
-                      </span>
-                    ))}
+          {individualCountryData &&
+            individualCountryData.map((country) => (
+              <div
+                className="flex flex-col gap-5 mb-16 pb-5 cursor-pointer dark:border-3 "
+                key={country.name.common}
+              >
+                <img src={country.flags.png}></img>
+                <div className="mt-5 flex flex-col gap-2">
+                  <h1 className="font-bold mb-5">{country.name.common}</h1>
+                  <p className="font-bold">
+                    Native name:
+                    <span className={countryDetailsStyle}>
+                      {
+                        country.name.nativeName[
+                          Object.keys(country.name.nativeName)[0]
+                        ].official
+                      }
+                    </span>
+                  </p>
+                  <p className="font-bold">
+                    Population:
+                    <span className={countryDetailsStyle}>
+                      {" "}
+                      {country.population.toLocaleString("en-US")}
+                    </span>
+                  </p>
+                  <p className="font-bold">
+                    Region:
+                    <span className={countryDetailsStyle}>
+                      {" "}
+                      {country.region}
+                    </span>
+                  </p>
+                  <div className="font-bold">
+                    Sub Region:
+                    <span className={countryDetailsStyle}>
+                      {country.subregion}
+                    </span>
+                  </div>
+                  <div className="font-bold flex gap-1">
+                    Capital:
+                    <div className="flex gap-2">
+                      <p className={countryDetailsStyle}>
+                        {country.capital[0]}
+                      </p>
+                    </div>
+                  </div>
+                  <p className="font-bold mt-5">
+                    Domain:
+                    <span className={countryDetailsStyle}> {country.tld}</span>
+                  </p>
+                  <p className="font-bold flex gap-1">
+                    Currencies:
+                    <span className="font-light flex gap-1">
+                      {Object.keys(country.currencies).map((currencyCode) => (
+                        <span
+                          className={countryDetailsStyle}
+                          key={crypto.randomUUID()}
+                        >
+                          {country.currencies[currencyCode].name}
+                        </span>
+                      ))}
+                    </span>
+                  </p>
+                  <div className="font-bold flex gap-1">
+                    Languages:
+                    <div className="font-light flex flex-wrap gap-2">
+                      {Object.keys(country.languages).map((language) => (
+                        <span
+                          className={countryDetailsStyle}
+                          key={crypto.randomUUID()}
+                        >
+                          {country.languages[language]}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                  <div className="font-bold mt-5">
+                    <p> Border Countries:</p>
+                    <div className="font-light gap-2 flex flex-wrap mt-1">
+                      {country.borders?.length > 0 ? (
+                        country.borders.map((borderingCountry) => (
+                          <span
+                            key={borderingCountry}
+                            className="dark:bg-slate-700 bg-zinc-300 rounded-md p-1 pl-2 pr-2 font-light"
+                            onClick={() =>
+                              navigate(
+                                `/name/${getFullCountryName(borderingCountry)}`,
+                              )
+                            }
+                          >
+                            {getFullCountryName(borderingCountry)}
+                          </span>
+                        ))
+                      ) : (
+                        <p className={countryDetailsStyle}>
+                          No bordering countries
+                        </p>
+                      )}
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          ))}
+            ))}
         </div>
       </div>
     </div>

@@ -14,7 +14,7 @@ function AllCountries({ isLoading }: Props) {
   };
 
   return (
-    <div className="mt-5">
+    <div className="mt-5 sm:grid sm:auto-cols-min sm:gap-5">
       {isLoading && <h1 className="text-center">Loading...</h1>}
       {context.filteredCountries.map((country) => (
         <div
@@ -22,7 +22,7 @@ function AllCountries({ isLoading }: Props) {
           key={country.name.common}
           onClick={() => handleSelectCountry(country.name.common)}
         >
-          <img src={country.flags.png}></img>
+          <img src={country.flags.png} className="sm:h-48"></img>
           <div className="p-5 flex flex-col">
             <h1 className="font-bold mb-5">{country.name.common}</h1>
             <p className="font-bold">
@@ -36,10 +36,18 @@ function AllCountries({ isLoading }: Props) {
               Region:
               <span className="font-light"> {country.region}</span>
             </p>
-            <p className="font-bold">
+            <div className="font-bold flex flex-wrap gap-1">
               Capital:
-              <span className="font-light"> {country.capital}</span>
-            </p>
+              <div className="font-light flex gap-2">
+                {Array.isArray(country.capital) ? (
+                  country.capital.map((item) => (
+                    <p key={crypto.randomUUID()}>{item}</p>
+                  ))
+                ) : (
+                  <p>{country.capital}</p>
+                )}
+              </div>
+            </div>
           </div>
         </div>
       ))}
