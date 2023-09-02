@@ -49,7 +49,6 @@ function App() {
   };
 
   const sortCountriesBy = (filter: string) => {
-    console.log(filter);
     if (filter === "PopulationUp") {
       const sortedCountries = [...allCountries].sort(
         (a, b) => b.population - a.population,
@@ -58,6 +57,16 @@ function App() {
     } else if (filter === "PopulationDown") {
       const sortedCountries = [...allCountries].sort(
         (a, b) => a.population - b.population,
+      );
+      setFilteredCountries(sortedCountries);
+    } else if (filter === "NameInOrder") {
+      const sortedCountries = [...allCountries].sort((a, b) =>
+        a.name.common.localeCompare(b.name.common),
+      );
+      setFilteredCountries(sortedCountries);
+    } else if (filter === "NameInReverseOrder") {
+      const sortedCountries = [...allCountries].sort((a, b) =>
+        b.name.common.localeCompare(a.name.common),
       );
       setFilteredCountries(sortedCountries);
     }
@@ -118,6 +127,8 @@ function App() {
               <option value="Sort by">Sort by</option>
               <option value="PopulationUp">Population ↑</option>
               <option value="PopulationDown">Population ↓</option>
+              <option value="NameInOrder">Name ↑</option>
+              <option value="NameInReverseOrder">Name ↓</option>
             </select>
           </div>
           {filteredCountries.length === 0 ? (
