@@ -18,10 +18,15 @@ function Nav() {
       <h1 className="font-bold cursor-pointer" onClick={() => navigate("/")}>
         Where in the world?
       </h1>
-      <span className="self-center ml-auto" onClick={handleThemeChange}>
-        <PiStarAndCrescent />
-      </span>
-      <p>Dark Mode</p>
+      <div
+        className="self-center ml-auto cursor-pointer flex gap-2 "
+        onClick={handleThemeChange}
+      >
+        <span className="self-center ">
+          <PiStarAndCrescent />
+        </span>
+        <p>Dark Mode</p>
+      </div>
     </nav>
   );
 }

@@ -103,13 +103,13 @@ function App() {
               <input
                 type="text"
                 placeholder="Search for a country..."
-                className="p-2 outline-none dark:bg-slate-700"
+                className="p-2 outline-none dark:bg-slate-700 cursor-pointer"
                 ref={inputRef}
                 onChange={(e) => handleInputSearch(e.target.value)}
               />
             </div>
             <select
-              className="p-4 shadow-md rounded-md dark:bg-slate-700 mt-4 smTablet:mt-0 tablet:ml-auto mr-2"
+              className="p-4 shadow-md rounded-md dark:bg-slate-700 mt-4 smTablet:mt-0 tablet:ml-auto mr-2 cursor-pointer"
               onChange={(e) => handleSelectRegion(e.target.value)}
             >
               <option value="Filter by Region">Filter by Region</option>
@@ -121,7 +121,7 @@ function App() {
             </select>
 
             <select
-              className="p-4 shadow-md rounded-md dark:bg-slate-700 mt-4 smTablet:mt-0"
+              className="p-4 shadow-md rounded-md dark:bg-slate-700 mt-4 smTablet:mt-0 cursor-pointer"
               onChange={(e) => sortCountriesBy(e.target.value)}
             >
               <option value="Sort by">Sort by</option>
