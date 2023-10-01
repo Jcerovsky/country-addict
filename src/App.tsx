@@ -4,6 +4,7 @@ import AllCountries from "./components/AllCountries";
 import { Context } from "./Context";
 import Nav from "./components/Nav";
 import ErrorMessage from "./components/ErrorMessage";
+import Loading from "./components/Loading";
 
 function App() {
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -91,6 +92,10 @@ function App() {
     }
   };
 
+  if (isLoading) {
+    return <Loading />;
+  }
+
   return (
     <div className="h-screen dark:bg-slate-800 bg-zinc-100">
       <div className="bg-zinc-100 dark:bg-slate-800 dark:text-white ">
@@ -138,7 +143,7 @@ function App() {
               </div>
             </div>
           ) : (
-            <AllCountries isLoading={isLoading} />
+            <AllCountries />
           )}
         </main>
       </div>

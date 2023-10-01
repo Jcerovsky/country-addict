@@ -1,11 +1,8 @@
 import { useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import { Context } from "../Context";
-interface Props {
-  isLoading: boolean;
-}
 
-function AllCountries({ isLoading }: Props) {
+function AllCountries() {
   const navigate = useNavigate();
   const context = useContext(Context)!;
 
@@ -15,7 +12,6 @@ function AllCountries({ isLoading }: Props) {
 
   return (
     <div className="mt-5 smTablet:grid smTablet:grid-cols-2 smTablet:gap-2 auto-cols-auto tablet:grid-cols-3 desktop:grid-cols-4 ">
-      {isLoading && <h1 className="text-center">Loading...</h1>}
       {context.filteredCountries.map((country) => (
         <div
           className="flex flex-col gap-5 mb-16 shadow-lg rounded-md pb-5 overflow-hidden cursor-pointer dark:bg-slate-700 dark:border-3 "
